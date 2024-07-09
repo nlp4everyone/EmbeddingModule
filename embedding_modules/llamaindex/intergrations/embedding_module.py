@@ -7,14 +7,14 @@ from system_components import Logger
 class IntergrationsEmbeddingModule(StandardlizedEmbeddingModule):
     def __init__(self,
                  model_name: str = "default",
-                 service_name: Union[Literal["COHERE","GRADIENT","MISTRAL","OPENAI","TOGETHER","VOYAGE","NOMIC"],str] = "COHERE",
+                 service_name: Union[Literal["COHERE","GRADIENT","OPENAI","JINA","VOYAGE","NOMIC","GEMINI"],str] = "COHERE",
                  batch_size: int = 10,
                  max_length : int = 1024):
         """Define embedding service with specified params"""
 
         super().__init__(batch_size = batch_size,max_length= max_length)
         # Define variables
-        list_services = list(llamaindex_services.keys())
+        list_services = list(supported_services.keys())
         # Check service available
         if service_name not in list_services:
             Logger.exception(f"Service {service_name} is not supported!")
@@ -24,7 +24,7 @@ class IntergrationsEmbeddingModule(StandardlizedEmbeddingModule):
         # Get model name
         if model_name == "default":
             # List models
-            list_models = llamaindex_services[service_name]["EMBBEDDING_MODELS"]
+            list_models = supported_services[service_name]["EMBBEDDING_MODELS"]
             # Check list
             if not isinstance(list_models,list) or len(list_models) == 0:
                 raise Exception(f"Wrong list of models")
@@ -34,12 +34,14 @@ class IntergrationsEmbeddingModule(StandardlizedEmbeddingModule):
             if len(self._model_name) == 0: raise Exception("Model name cant be empty")
 
         # Define key
-        self._api_key = llamaindex_services[service_name]["KEY"]
+        self._api_key = supported_services[service_name]["KEY"]
+
         # TOGETHER service
-        if service_name == "TOGETHER":
-            from llama_index.embeddings.together import TogetherEmbedding
-            self._embedding_model = TogetherEmbedding(model_name = self._model_name,
-                                                      api_key = self._api_key)
+        if service_name == "JINA":
+            from llama_index.embeddings.jinaai import JinaEmbedding
+            self._embedding_model = JinaEmbedding(api_key = self._api_key,
+                                                  model = self._model_name,
+                                                  embed_batch_size = self.batch_size)
 
         elif service_name == "COHERE":
             from llama_index.embeddings.cohere import CohereEmbedding
@@ -62,6 +64,11 @@ class IntergrationsEmbeddingModule(StandardlizedEmbeddingModule):
             Logger.exception("Mistral currently required charge")
             raise Exception("Mistral currently required charge")
 
+        elif service_name == "GEMINI":
+            # Gemini
+            from llama_index.embeddings.gemini import GeminiEmbedding
+            self._embedding_model = GeminiEmbedding(model_name = self._model_name,
+                                                    api_key = self._api_key)
         # elif service_name == "NOMIC":
         #     self._embedding_model = NomicEmbedding(api_key=self.api_key,embed_batch_size=self.batch_size)
         else:

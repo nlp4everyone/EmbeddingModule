@@ -47,7 +47,7 @@
     },
     "GEMINI":{
         "CHAT_MODELS":["models/gemini-pro","models/gemini-1.5-pro-latest","models/gemini-pro-vision"],
-        "EMBBEDDING_MODELS":[]
+        "EMBBEDDING_MODELS":["models/embedding-001", "models/text-embedding-004"]
     },
     "QDRANT":{
         "CHAT_MODELS":[],
@@ -60,5 +60,9 @@
     "NOMIC":{
         "CHAT_MODELS":[],
         "EMBBEDDING_MODELS":["nomic-embed-text-v1","nomic-embed-text-v1.5"]
+    },
+    "JINA":{
+        "CHAT_MODELS":[],
+        "EMBBEDDING_MODELS":["jina-embeddings-v2-base-de","multilingual-e5-base"]
     }
 }
