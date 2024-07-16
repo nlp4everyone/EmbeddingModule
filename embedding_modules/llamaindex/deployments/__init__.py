@@ -1,1 +1,1 @@
-from embedding_modules.llamaindex.deployments.embedding_module import EmbeddingModule, EmbeddingProvider
+from embedding_modules.llamaindex.deployments.embedding_module import EmbeddingModule

@@ -1,7 +1,9 @@
 .env
 .idea/
+cache_folder/
 config/__pycache__
 chat_modules/llamaindex/__pycache__
 embedding_modules/llamaindex/__pycache__/
 embedding_modules/llamaindex/intergrations/__pycache__/
+embedding_modules/llamaindex/deployments/__pycache__/
 system_components
